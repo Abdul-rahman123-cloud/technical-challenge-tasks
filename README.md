@@ -5,7 +5,7 @@
 This repository contains a solution for a multi-part software engineering challenge. The solution demonstrates:
 
 - **Task 1:** A complete 3-tier architecture application for inventory management deployed on AWS.
-  - **Tier 1 (Presentation):** A front-end interface (`index.html`) hosted on AWS Amplify.
+  - **Tier 1 (Presentation):** A front-end interface (`index.html`) hosted on AWS Amplify https://main.d1g0jgan4hvjfw.amplifyapp.com/.
   - **Tier 2 (Application Logic):** AWS Lambda functions implementing business logic to fetch, add, and update inventory.
   - **Tier 3 (Data):** A DynamoDB table that stores the inventory data.
 - **Task 2:** A Lambda function that retrieves metadata from an AWS EC2 instance and returns it as JSON, with the ability to query specific metadata keys.
