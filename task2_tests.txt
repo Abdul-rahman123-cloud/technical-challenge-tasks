@@ -1,0 +1,41 @@
+test 1: get all metadata
+
+{
+  "httpMethod": "GET",
+  "path": "/metadata",
+  "pathParameters": null
+}
+
+test 1 output:
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"instanceId\": \"i-0c0b9f37451e2c740\", \"instanceType\": \"t2.micro\", \"launchTime\": \"2025-03-21 17:08:51+00:00\", \"availabilityZone\": \"us-east-1b\", \"state\": \"running\", \"amiId\": \"ami-08b5b3a93ed654d19\", \"vpcId\": \"vpc-0fd0eb090ff6acaa7\", \"subnetId\": \"subnet-0fa531dc987866b53\", \"privateIpAddress\": \"172.31.94.176\", \"publicIpAddress\": \"34.238.241.163\", \"securityGroups\": [{\"groupId\": \"sg-0005328039a3dd2be\", \"groupName\": \"launch-wizard-1\"}], \"tags\": {\"Name\": \"MetadataInstanceTask2\"}}"
+}
+
+
+
+__________________________________________________________________________________________________________________________________________________________________
+
+test 2: get specific metadata:
+
+{
+  "httpMethod": "GET",
+  "path": "/metadata/instanceId",
+  "pathParameters": {
+    "key": "instanceId"
+  }
+}
+
+
+test 2 output:
+
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"instanceId\": \"i-0c0b9f37451e2c740\"}"
+}

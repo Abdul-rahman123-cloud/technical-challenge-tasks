@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inventory Management</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS (CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f7f9fc;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+
+    .item {
+      background-color: #f8f9fa;
+      border-radius: 6px;
+      padding: 10px;
+      margin-bottom: 8px;
+    }
+
+    .btn-custom {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center mb-4">Inventory Management</h1>
+
+    <!-- Inventory List -->
+    <div class="mb-4">
+      <button class="btn btn-warning mb-3 btn-custom" onclick="fetchItems()">🔄 Refresh Items</button>
+      <ul class="list-group" id="item-list"></ul>
+    </div>
+
+    <!-- Add New Item -->
+    <div class="card p-3 mb-4">
+      <h5>Add New Item</h5>
+      <input id="new-name" type="text" class="form-control mb-2" placeholder="Product Name">
+      <input id="new-quantity" type="number" class="form-control mb-2" placeholder="Quantity">
+      <button class="btn btn-success btn-custom" onclick="addItem()">➕ Add Item</button>
+    </div>
+
+    <!-- Update Quantity -->
+    <div class="card p-3">
+      <h5>Update Item Quantity</h5>
+      <input id="update-id" type="text" class="form-control mb-2" placeholder="Product ID">
+      <input id="update-quantity" type="number" class="form-control mb-2" placeholder="New Quantity">
+      <button class="btn btn-primary btn-custom" onclick="updateItem()">🔁 Update Quantity</button>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const BASE_URL_ADD_UPDATE = "https://ya5t24xky6tgjpl6ohckb42ljq0tysdn.lambda-url.us-east-1.on.aws";
+    const BASE_URL_FETCH = "https://lgxymwdzhitho5nglp3se4gfce0yposx.lambda-url.us-east-1.on.aws";
+
+    async function fetchItems() {
+      const list = document.getElementById("item-list");
+      list.innerHTML = "<li class='list-group-item'>Loading...</li>";
+
+      try {
+        const response = await fetch(BASE_URL_FETCH);
+        const data = await response.json();
+
+        list.innerHTML = "";
+
+        if (data.items && data.items.length > 0) {
+          data.items.forEach(item => {
+            const li = document.createElement("li");
+            li.className = "list-group-item item";
+            li.innerHTML = `
+              <strong>ID:</strong> ${item.product_id} <br>
+              <strong>Name:</strong> ${item.product_name} <br>
+              <strong>Quantity:</strong> ${item.quantity}
+            `;
+            list.appendChild(li);
+          });
+        } else {
+          list.innerHTML = "<li class='list-group-item'>No items found.</li>";
+        }
+      } catch (err) {
+        console.error("Error fetching items:", err);
+        alert("Error fetching items.");
+      }
+    }
+
+    async function addItem() {
+      const name = document.getElementById("new-name").value.trim();
+      const quantity = parseInt(document.getElementById("new-quantity").value);
+
+      if (!name || isNaN(quantity)) {
+        alert("Please enter a valid product name and quantity.");
+        return;
+      }
+
+      const payload = {
+        action: "add_item",
+        product_name: name,
+        quantity: quantity
+      };
+
+      try {
+        const response = await fetch(BASE_URL_ADD_UPDATE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        alert(data.message || "Item added.");
+
+        document.getElementById("new-name").value = "";
+        document.getElementById("new-quantity").value = "";
+
+        fetchItems();
+      } catch (err) {
+        console.error("Error adding item:", err);
+        alert("Error adding item.");
+      }
+    }
+
+    async function updateItem() {
+      const id = document.getElementById("update-id").value.trim();
+      const quantity = parseInt(document.getElementById("update-quantity").value);
+
+      if (!id || isNaN(quantity)) {
+        alert("Please enter a valid product ID and quantity.");
+        return;
+      }
+
+      const payload = {
+        action: "update_item",
+        product_id: id,
+        quantity: quantity
+      };
+
+      try {
+        const response = await fetch(BASE_URL_ADD_UPDATE, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        alert(data.message || "Item updated.");
+
+        document.getElementById("update-id").value = "";
+        document.getElementById("update-quantity").value = "";
+
+        fetchItems();
+      } catch (err) {
+        console.error("Error updating item:", err);
+        alert("Error updating item.");
+      }
+    }
+
+    // Fetch items on initial load
+    window.onload = fetchItems;
+  </script>
+</body>
+</html>

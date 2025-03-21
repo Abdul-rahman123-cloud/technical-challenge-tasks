@@ -1,0 +1,50 @@
+Task3_nested_objects tests and outputs
+
+test 1:
+
+{
+  "object": {
+    "a": {
+      "b": {
+        "c": "d"
+      }
+    }
+  },
+  "key": "a/b/c"
+}
+
+test 1 output:
+
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"object\": {\"a\": {\"b\": {\"c\": \"d\"}}}, \"key\": \"a/b/c\", \"value\": \"d\"}"
+}
+
+___________________________________________________________________________________________________________
+
+test 2:
+
+{
+  "object": {
+    "x": {
+      "y": {
+        "z": "a"
+      }
+    }
+  },
+  "key": "x/y/z"
+}
+
+
+test 2 output:
+
+{
+  "statusCode": 200,
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{\"object\": {\"x\": {\"y\": {\"z\": \"a\"}}}, \"key\": \"x/y/z\", \"value\": \"a\"}"
+}
